@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcx.cms.mapper.ArticleMapper">
+	<resultMap id="BaseResultMap"
+		type="Article">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="picture" property="picture" jdbcType="VARCHAR" />
+		<result column="channel_id" property="channelId"
+			jdbcType="INTEGER" />
+		<result column="category_id" property="categoryId"
+			jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="hits" property="hits" jdbcType="INTEGER" />
+		<result column="hot" property="hot" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="deleted" property="deleted" jdbcType="INTEGER" />
+		<result column="created" property="created"
+			jdbcType="TIMESTAMP" />
+		<result column="updated" property="updated"
+			jdbcType="TIMESTAMP" />
+		<result column="content_type" property="contentType"
+			jdbcType="INTEGER" />
+		<result column="keywords" property="keywords"
+			jdbcType="VARCHAR" />
+		<result column="original" property="original"
+			jdbcType="VARCHAR" />
+		<result column="complain_num" property="complainNum" javaType="INTEGER"/>
+		<result column="content" property="content"
+			jdbcType="VARCHAR" />
+		<result column="summary" property="summary"
+			jdbcType="VARCHAR" />
+		
+		<!-- 封装单个对象 -->
+		<!-- <association property="user"
+			select="com.lcx.cms.dao.UserMapper.selectByPrimaryKey"
+			column="user_id">
+		</association>
+		<association property="channel"
+			select="com.lcx.cms.dao.ChannelMapper.selectByPrimaryKey"
+			column="channel_id">
+		</association>
+		<association property="category"
+			select="com.lcx.cms.dao.CategoryMapper.selectByPrimaryKey"
+			column="category_id">
+		</association> -->
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, title, picture, channel_id, category_id, user_id, hits, hot, status,
+		deleted,
+		created, updated, content_type, keywords, original,complain_num,content,summary
+	</sql>
+	
+	<select id="selects" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+	    from cms_article
+		<where>
+			<if test="null != startDate and startDate != ''">
+				and created >= #{startDate}
+			</if>
+			<if test="null != endDate and endDate != ''">
+				and created &lt;= #{endDate}
+			</if>
+		</where>
+		<if
+			test="null != orderMethod and orderMethod != '' and null != orderName and orderName != ''">
+			order by ${orderName} ${orderMethod}
+		</if>
+	</select>
+
+</mapper>
